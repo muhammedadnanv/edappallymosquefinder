@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, CreditCard } from "lucide-react";
+import { Heart, CreditCard, MessageCircle } from "lucide-react";
 
 const UPI_ID = "muhammed.39@superyes";
 const PAYEE = "Muhammed Adnan";
@@ -13,6 +13,7 @@ const getPayLink = (amount: number) =>
 
 const DonationCard = () => {
   const [selectedAmount, setSelectedAmount] = useState(199);
+  const [customAmount, setCustomAmount] = useState("");
 
   return (
     <section className="container mx-auto px-4 py-8">
@@ -45,9 +46,9 @@ const DonationCard = () => {
                 {amounts.map((amt) => (
                   <button
                     key={amt}
-                    onClick={() => setSelectedAmount(amt)}
+                    onClick={() => { setSelectedAmount(amt); setCustomAmount(""); }}
                     className={`px-4 py-2 rounded-lg text-sm font-bold border-2 transition-all ${
-                      selectedAmount === amt
+                      selectedAmount === amt && !customAmount
                         ? "bg-primary text-primary-foreground border-primary scale-105"
                         : "bg-muted text-muted-foreground border-border hover:border-primary/50"
                     }`}
@@ -55,6 +56,27 @@ const DonationCard = () => {
                     ₹{amt}
                   </button>
                 ))}
+              </div>
+
+              <div className="mb-4">
+                <label className="text-xs text-muted-foreground mb-1 block">Or enter custom amount:</label>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-card-foreground">₹</span>
+                  <input
+                    type="number"
+                    min="1"
+                    max="100000"
+                    placeholder="Enter amount"
+                    value={customAmount}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setCustomAmount(val);
+                      const num = parseInt(val, 10);
+                      if (num > 0) setSelectedAmount(num);
+                    }}
+                    className="flex-1 px-3 py-2 rounded-lg border-2 border-border bg-background text-sm text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+                  />
+                </div>
               </div>
 
               <div className="space-y-1.5 text-sm text-card-foreground mb-4 bg-muted/50 rounded-lg p-3">
@@ -74,6 +96,16 @@ const DonationCard = () => {
               <p className="text-[11px] text-muted-foreground text-center mt-3">
                 PhonePe · Google Pay · Paytm · BHIM & all UPI apps
               </p>
+
+              <a
+                href="https://whatsapp.com/channel/0029VbBpLYS5fM5hDqHasE26"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full py-2.5 mt-3 rounded-xl bg-[hsl(142,70%,40%)] text-white font-semibold hover:opacity-90 transition-opacity text-sm"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Join our WhatsApp Channel
+              </a>
             </div>
           </div>
         </div>

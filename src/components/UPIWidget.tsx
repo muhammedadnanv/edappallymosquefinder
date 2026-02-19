@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, CreditCard, Heart } from "lucide-react";
+import { X, CreditCard, Heart, MessageCircle } from "lucide-react";
 
 const UPI_ID = "muhammed.39@superyes";
 const PAYEE = "Muhammed Adnan";
@@ -15,6 +15,7 @@ const getPayLink = (amount: number) =>
 const UPIWidget = () => {
   const [open, setOpen] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState(99);
+  const [customAmount, setCustomAmount] = useState("");
 
   return (
     <>
@@ -49,9 +50,9 @@ const UPIWidget = () => {
               {amounts.map((amt) => (
                 <button
                   key={amt}
-                  onClick={() => setSelectedAmount(amt)}
+                  onClick={() => { setSelectedAmount(amt); setCustomAmount(""); }}
                   className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-all ${
-                    selectedAmount === amt
+                    selectedAmount === amt && !customAmount
                       ? "bg-primary text-primary-foreground border-primary"
                       : "bg-muted text-muted-foreground border-border hover:border-primary/50"
                   }`}
@@ -59,6 +60,26 @@ const UPIWidget = () => {
                   ₹{amt}
                 </button>
               ))}
+            </div>
+
+            <div className="mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-card-foreground">₹</span>
+                <input
+                  type="number"
+                  min="1"
+                  max="100000"
+                  placeholder="Custom amount"
+                  value={customAmount}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setCustomAmount(val);
+                    const num = parseInt(val, 10);
+                    if (num > 0) setSelectedAmount(num);
+                  }}
+                  className="flex-1 px-3 py-1.5 rounded-lg border border-border bg-background text-sm text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+                />
+              </div>
             </div>
 
             <img
@@ -84,6 +105,16 @@ const UPIWidget = () => {
             <p className="text-[11px] text-muted-foreground text-center mt-3 leading-relaxed">
               Supports PhonePe, Google Pay, Paytm, BHIM & all UPI apps
             </p>
+
+            <a
+              href="https://whatsapp.com/channel/0029VbBpLYS5fM5hDqHasE26"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-1.5 w-full py-2 mt-3 rounded-lg bg-[hsl(142,70%,40%)] text-white font-semibold hover:opacity-90 transition-opacity text-xs"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              Join WhatsApp Channel
+            </a>
           </div>
 
           <div className="border-t border-border px-3 py-2 text-center rounded-b-xl bg-muted">
