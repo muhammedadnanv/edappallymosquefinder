@@ -1,5 +1,6 @@
 import logo from "@/assets/logo.png";
 import { MapPin, Search } from "lucide-react";
+import NotificationBell from "@/components/NotificationBell";
 
 interface HeroSectionProps {
   onSearch: (query: string) => void;
@@ -48,6 +49,7 @@ const HeroSection = ({ onSearch, onLocateMe, searchQuery }: HeroSectionProps) =>
             <MapPin className="w-5 h-5" />
             Near Me
           </button>
+          <NotificationBell />
         </div>
       </div>
     </section>
