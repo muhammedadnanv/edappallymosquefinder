@@ -5,6 +5,7 @@ import MosqueCard from "@/components/MosqueCard";
 import Footer from "@/components/Footer";
 import UPIWidget from "@/components/UPIWidget";
 import DonationCard from "@/components/DonationCard";
+import WhatsAppSection from "@/components/WhatsAppSection";
 import { mosques, calculateDistance, Mosque } from "@/data/mosques";
 import { toast } from "sonner";
 
@@ -73,7 +74,7 @@ const Index = () => {
           </div>
         )}
       </main>
-
+      <WhatsAppSection />
       <DonationCard />
       <Footer />
       <UPIWidget />
