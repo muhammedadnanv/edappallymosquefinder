@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Heart, CreditCard, MessageCircle } from "lucide-react";
+import { Heart, CreditCard } from "lucide-react";
+import WhatsAppChannel from "@/components/WhatsAppChannel";
 
 const UPI_ID = "muhammed.39@superyes";
 const PAYEE = "Muhammed Adnan";
@@ -97,15 +98,9 @@ const DonationCard = () => {
                 PhonePe · Google Pay · Paytm · BHIM & all UPI apps
               </p>
 
-              <a
-                href="https://whatsapp.com/channel/0029VbBpLYS5fM5hDqHasE26"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-2.5 mt-3 rounded-xl bg-[hsl(142,70%,40%)] text-white font-semibold hover:opacity-90 transition-opacity text-sm"
-              >
-                <MessageCircle className="w-4 h-4" />
-                Join our WhatsApp Channel
-              </a>
+              <div className="mt-3">
+                <WhatsAppChannel />
+              </div>
             </div>
           </div>
         </div>
