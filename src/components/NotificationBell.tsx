@@ -1,120 +1,88 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Bell, BellRing } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const NotificationBell = () => {
-  const [subscribed, setSubscribed] = useState(false);
-  const [loading, setLoading] = useState(false);
+const MAGHRIB_TIME = "18:30"; // 6:30 PM - update as needed
 
-  useEffect(() => {
-    // Check if already subscribed
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      navigator.serviceWorker.ready.then((reg: any) => {
-        reg.pushManager.getSubscription().then((sub: any) => {
-          setSubscribed(!!sub);
-        });
-      });
-    }
+function getNextMaghrib(): Date {
+  const now = new Date();
+  const [hours, minutes] = MAGHRIB_TIME.split(":").map(Number);
+  const target = new Date(now);
+  target.setHours(hours, minutes, 0, 0);
+  if (target <= now) {
+    target.setDate(target.getDate() + 1);
+  }
+  return target;
+}
+
+const NotificationBell = () => {
+  const [enabled, setEnabled] = useState(() => localStorage.getItem("maghrib-notify") === "true");
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const scheduleNotification = useCallback(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    const ms = getNextMaghrib().getTime() - Date.now();
+    timerRef.current = setTimeout(() => {
+      if (Notification.permission === "granted") {
+        new Notification("🕌 Maghrib Time!", {
+          body: "It's time for Maghrib prayer. Find nearby mosques in Edappally.",
+          icon: "/favicon.png",
+          tag: "maghrib-prayer",
+        } as NotificationOptions);
+      }
+      // Reschedule for next day
+      scheduleNotification();
+    }, ms);
   }, []);
 
-  const subscribe = async () => {
-    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-      toast.error("Push notifications are not supported in your browser");
+  useEffect(() => {
+    if (enabled && Notification.permission === "granted") {
+      scheduleNotification();
+    }
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [enabled, scheduleNotification]);
+
+  const toggle = async () => {
+    if (enabled) {
+      setEnabled(false);
+      localStorage.removeItem("maghrib-notify");
+      if (timerRef.current) clearTimeout(timerRef.current);
+      toast.success("Notifications disabled");
       return;
     }
 
-    setLoading(true);
+    if (!("Notification" in window)) {
+      toast.error("Notifications not supported in your browser");
+      return;
+    }
 
-    try {
-      // Register service worker
-      const registration: any = await navigator.serviceWorker.register('/sw.js');
-      await navigator.serviceWorker.ready;
-
-      // Get VAPID public key from env
-      const vapidPublicKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
-      if (!vapidPublicKey) {
-        toast.error("Notification service not configured yet");
-        setLoading(false);
-        return;
-      }
-
-      // Convert VAPID key
-      const padding = '='.repeat((4 - vapidPublicKey.length % 4) % 4);
-      const base64 = (vapidPublicKey + padding).replace(/-/g, '+').replace(/_/g, '/');
-      const rawData = atob(base64);
-      const applicationServerKey = new Uint8Array(rawData.length);
-      for (let i = 0; i < rawData.length; i++) {
-        applicationServerKey[i] = rawData.charCodeAt(i);
-      }
-
-      // Subscribe
-      const subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey,
-      });
-
-      const subJson = subscription.toJSON();
-
-      // Store in database
-      const { error } = await supabase.from('push_subscriptions').upsert({
-        endpoint: subJson.endpoint!,
-        p256dh: subJson.keys!.p256dh!,
-        auth: subJson.keys!.auth!,
-      }, { onConflict: 'endpoint' });
-
-      if (error) throw error;
-
-      setSubscribed(true);
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+      setEnabled(true);
+      localStorage.setItem("maghrib-notify", "true");
+      scheduleNotification();
       toast.success("🔔 You'll be notified at Maghrib time!");
-    } catch (err: any) {
-      if (err.name === 'NotAllowedError') {
-        toast.error("Please allow notifications in your browser settings");
-      } else {
-        toast.error("Failed to enable notifications");
-        console.error(err);
-      }
-    } finally {
-      setLoading(false);
+    } else {
+      toast.error("Please allow notifications in your browser settings");
     }
   };
 
-  const unsubscribe = async () => {
-    setLoading(true);
-    try {
-      const registration: any = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.getSubscription();
-      if (subscription) {
-        const endpoint = subscription.endpoint;
-        await subscription.unsubscribe();
-        await supabase.from('push_subscriptions').delete().eq('endpoint', endpoint);
-      }
-      setSubscribed(false);
-      toast.success("Notifications disabled");
-    } catch {
-      toast.error("Failed to disable notifications");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-    return null;
-  }
+  if (!("Notification" in window)) return null;
 
   return (
     <button
-      onClick={subscribed ? unsubscribe : subscribe}
-      disabled={loading}
+      onClick={toggle}
       className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-        subscribed
+        enabled
           ? "bg-gold/20 text-gold border border-gold/30"
           : "bg-primary-foreground/10 text-primary-foreground border border-primary-foreground/20 hover:bg-primary-foreground/20"
       }`}
-      title={subscribed ? "Disable Maghrib notifications" : "Get notified at Maghrib time"}
+      title={enabled ? "Disable Maghrib notifications" : "Get notified at Maghrib time"}
     >
-      {subscribed ? <BellRing className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
-      {loading ? "..." : subscribed ? "Maghrib Alert On" : "Notify at Maghrib"}
+      {enabled ? <BellRing className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
+      {enabled ? "Maghrib Alert On" : "Notify at Maghrib"}
     </button>
   );
 };
