@@ -14,27 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      profiles: {
-        Row: {
-          created_at: string
-          display_name: string | null
-          id: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          display_name?: string | null
-          id?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          display_name?: string | null
-          id?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       push_subscriptions: {
         Row: {
           auth: string
@@ -56,66 +35,6 @@ export type Database = {
           endpoint?: string
           id?: string
           p256dh?: string
-        }
-        Relationships: []
-      }
-      submitted_mosques: {
-        Row: {
-          address: string
-          asr: string
-          created_at: string
-          dhuhr: string
-          facilities: string[] | null
-          fajr: string
-          id: string
-          isha: string
-          juma: string
-          lat: number
-          lng: number
-          maghrib: string
-          name: string
-          name_ml: string
-          phone: string | null
-          status: string
-          user_id: string
-        }
-        Insert: {
-          address: string
-          asr: string
-          created_at?: string
-          dhuhr: string
-          facilities?: string[] | null
-          fajr: string
-          id?: string
-          isha: string
-          juma: string
-          lat: number
-          lng: number
-          maghrib: string
-          name: string
-          name_ml?: string
-          phone?: string | null
-          status?: string
-          user_id: string
-        }
-        Update: {
-          address?: string
-          asr?: string
-          created_at?: string
-          dhuhr?: string
-          facilities?: string[] | null
-          fajr?: string
-          id?: string
-          isha?: string
-          juma?: string
-          lat?: number
-          lng?: number
-          maghrib?: string
-          name?: string
-          name_ml?: string
-          phone?: string | null
-          status?: string
-          user_id?: string
         }
         Relationships: []
       }
