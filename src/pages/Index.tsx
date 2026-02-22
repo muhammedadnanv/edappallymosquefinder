@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import RamadanBanner from "@/components/RamadanBanner";
 import HeroSection from "@/components/HeroSection";
 import PrayerTimesBar from "@/components/PrayerTimesBar";
 import MosqueCard from "@/components/MosqueCard";
@@ -51,13 +52,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <RamadanBanner />
       <HeroSection onSearch={handleSearch} onLocateMe={handleLocateMe} searchQuery={searchQuery} />
       <PrayerTimesBar />
 
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl md:text-2xl font-bold text-foreground">
-            🕌 Mosques in Edappally
+            🕌 Mosques Near You
           </h2>
           <span className="text-sm text-muted-foreground">{filtered.length} found</span>
         </div>

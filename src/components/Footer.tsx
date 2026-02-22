@@ -5,7 +5,7 @@ const Footer = () => {
     <footer className="gradient-hero py-10">
       <div className="container mx-auto px-4 text-center">
         <p className="text-primary-foreground/60 text-xs mb-3">
-          © {new Date().getFullYear()} ചൊറുള്ള പള്ളി in Edappally. All rights reserved.
+          © {new Date().getFullYear()} ചോറുള്ള പള്ളി — Find Nearby Mosques. All rights reserved.
         </p>
         <p className="flex items-center justify-center gap-1 text-sm text-primary-foreground/80">
           Developed with <Heart className="w-4 h-4 text-red-400 fill-red-400" /> by{" "}
