@@ -25,10 +25,10 @@ const HeroSection = ({ onSearch, onLocateMe, searchQuery }: HeroSectionProps) =>
           className="w-28 h-28 md:w-36 md:h-36 mx-auto mb-6 animate-float rounded-2xl"
         />
         <h1 className="text-3xl md:text-5xl font-extrabold text-primary-foreground mb-2">
-          ചൊറുള്ള പള്ളി
+          ചോറുള്ള പള്ളി
         </h1>
         <p className="text-lg md:text-xl text-primary-foreground/80 mb-8">
-          In Edappally — Find Nearby Mosques Easily
+          🌙 Find Nearby Mosques Easily — Anywhere this Ramadan
         </p>
 
         <div className="max-w-xl mx-auto flex flex-col sm:flex-row gap-3">
