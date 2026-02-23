@@ -10,7 +10,7 @@ const WhatsAppChannel = ({ compact = false }: WhatsAppChannelProps) => {
       href="https://whatsapp.com/channel/0029VbBpLYS5fM5hDqHasE26"
       target="_blank"
       rel="noopener noreferrer"
-      className={`flex items-center justify-center gap-2 w-full rounded-xl bg-[hsl(142,70%,40%)] text-white font-semibold hover:opacity-90 transition-opacity ${
+      className={`flex items-center justify-center gap-2 w-full rounded-xl bg-whatsapp text-whatsapp-foreground font-semibold hover:opacity-90 transition-opacity ${
         compact ? "py-2 text-xs gap-1.5 rounded-lg" : "py-2.5 text-sm"
       }`}
     >
