@@ -1,7 +1,5 @@
 import logo from "@/assets/logo.png";
-import { MapPin, Search, LogIn, LogOut, Plus } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { MapPin, Search } from "lucide-react";
 import NotificationBell from "@/components/NotificationBell";
 
 interface HeroSectionProps {
@@ -11,8 +9,6 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({ onSearch, onLocateMe, searchQuery }: HeroSectionProps) => {
-  const { user, signOut } = useAuth();
-
   return (
     <section className="gradient-hero relative overflow-hidden">
       {/* Decorative pattern */}
@@ -54,35 +50,6 @@ const HeroSection = ({ onSearch, onLocateMe, searchQuery }: HeroSectionProps) =>
             Near Me
           </button>
           <NotificationBell />
-        </div>
-
-        <div className="flex items-center justify-center gap-3 mt-4">
-          {user ? (
-            <>
-              <Link
-                to="/submit-mosque"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gold text-gold-foreground font-semibold hover:opacity-90 transition-opacity text-sm shadow-mosque"
-              >
-                <Plus className="w-4 h-4" />
-                Add Mosque
-              </Link>
-              <button
-                onClick={signOut}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-foreground/10 text-primary-foreground border border-primary-foreground/20 font-semibold hover:bg-primary-foreground/20 transition-colors text-sm"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign Out
-              </button>
-            </>
-          ) : (
-            <Link
-              to="/auth"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gold text-gold-foreground font-semibold hover:opacity-90 transition-opacity text-sm shadow-mosque"
-            >
-              <LogIn className="w-4 h-4" />
-              Sign In to Add Mosque
-            </Link>
-          )}
         </div>
       </div>
     </section>
