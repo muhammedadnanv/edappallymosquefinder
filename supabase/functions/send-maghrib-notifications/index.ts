@@ -154,7 +154,7 @@ Deno.serve(async (req) => {
           await supabase.from('push_subscriptions').delete().eq('endpoint', sub.endpoint);
         }
       } catch (e) {
-        results.push({ endpoint: sub.endpoint, error: e.message });
+        results.push({ endpoint: sub.endpoint, error: (e as Error).message });
       }
     }
 
@@ -162,7 +162,7 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: (error as Error).message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

@@ -47,6 +47,12 @@
 
     --gold: 42 87% 55%;
     --gold-foreground: 42 87% 15%;
+
+    --whatsapp: 142 70% 40%;
+    --whatsapp-foreground: 0 0% 100%;
+
+    --ramadan: 270 60% 20%;
+    --ramadan-end: 217 100% 22%;
   }
 
   .dark {
