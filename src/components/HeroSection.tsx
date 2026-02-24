@@ -1,6 +1,8 @@
 import logo from "@/assets/logo.png";
-import { MapPin, Search } from "lucide-react";
+import { MapPin, Search, LogIn, Plus, List, LogOut } from "lucide-react";
 import NotificationBell from "@/components/NotificationBell";
+import { useAuth } from "@/contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 interface HeroSectionProps {
   onSearch: (query: string) => void;
@@ -9,8 +11,32 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({ onSearch, onLocateMe, searchQuery }: HeroSectionProps) => {
+  const { user, signOut } = useAuth();
+
   return (
     <section className="gradient-hero relative overflow-hidden">
+      {/* Auth bar */}
+      <div className="container mx-auto px-4 pt-4 relative z-10">
+        <div className="flex justify-end gap-2">
+          {user ? (
+            <>
+              <Link to="/submit-mosque" className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/30 transition-colors">
+                <Plus className="w-3.5 h-3.5" /> Submit Mosque
+              </Link>
+              <Link to="/my-submissions" className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/30 transition-colors">
+                <List className="w-3.5 h-3.5" /> My Submissions
+              </Link>
+              <button onClick={signOut} className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/30 transition-colors">
+                <LogOut className="w-3.5 h-3.5" /> Sign Out
+              </button>
+            </>
+          ) : (
+            <Link to="/auth" className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/30 transition-colors">
+              <LogIn className="w-3.5 h-3.5" /> Sign In
+            </Link>
+          )}
+        </div>
+      </div>
       {/* Decorative pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-10 left-10 w-40 h-40 border-2 border-primary-foreground rounded-full" />
