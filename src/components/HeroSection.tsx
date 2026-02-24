@@ -1,6 +1,8 @@
 import logo from "@/assets/logo.png";
-import { MapPin, Search } from "lucide-react";
+import { MapPin, Search, LogIn, Plus, List, LogOut } from "lucide-react";
 import NotificationBell from "@/components/NotificationBell";
+import { useAuth } from "@/contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 interface HeroSectionProps {
   onSearch: (query: string) => void;
